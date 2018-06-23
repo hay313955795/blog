@@ -15,19 +15,10 @@ import java.util.List;
 @SpringBootTest
 public class ApplicationTests {
 
-	@Autowired
-	private CategoryRepository categoryRepository;
 
-	@Autowired
-	private CacheManager cacheManager;
+    @Test
+    public void contextLoads() {
+    }
 
-	@Test
-	public void contextLoads() {
-		List<Category> list = categoryRepository.findAll();
-		System.out.println("第一次查询："+list.get(0).getCateName());
-
-		List<Category> list2 = categoryRepository.findAll();
-		System.out.println("第二次查询："+list.get(0).getCateName());
-	}
 
 }

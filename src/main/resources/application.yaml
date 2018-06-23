@@ -1,5 +1,5 @@
 server:
-  port: 8090
+  port: 80
   tomcat:
     min-spare-threads: 20
     max-threads: 100
@@ -11,16 +11,16 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
 
     # H2database 配置
-    driver-class-name: org.h2.Driver
-    url: jdbc:h2:file:~/halo/halo
-    username: admin
-    password: 123456
+    #driver-class-name: org.h2.Driver
+    #url: jdbc:h2:file:~/halo/halo
+    #username: admin
+    #password: 123456
 
     #MySql配置
-#    driver-class-name: com.mysql.jdbc.Driver
-#    url: jdbc:mysql://127.0.0.1:3306/halodb?characterEncoding=utf8&useSSL=false
-#    username: root
-#    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://118.25.17.117:3306/halodb?characterEncoding=utf8&useSSL=false
+    username: root
+    password: root
 
   h2:
     console:

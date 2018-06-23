@@ -7,6 +7,8 @@ import cc.ryanc.halo.model.dto.LogsRecord;
 import cc.ryanc.halo.service.AttachmentService;
 import cc.ryanc.halo.service.LogsService;
 import cc.ryanc.halo.utils.HaloUtils;
+import cc.ryanc.halo.utils.ImageUploadToQINIU;
+import com.sun.prism.shader.Solid_TextureYV12_AlphaTest_Loader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +28,7 @@ import javax.websocket.server.PathParam;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -87,6 +90,9 @@ public class AttachmentController {
         Sort sort = new Sort(Sort.Direction.DESC, "attachId");
         Pageable pageable = PageRequest.of(page, 18, sort);
         Page<Attachment> attachments = attachmentService.findAllAttachments(pageable);
+       for(int index = 0;index<attachments.getContent().size();index++){
+           System.out.println(attachments.getContent().get(index).getAttachSmallPath());
+       }
         model.addAttribute("attachments", attachments);
         model.addAttribute("id", id);
         if(StringUtils.equals(type,"post")){
@@ -135,35 +141,40 @@ public class AttachmentController {
         Map<String, Object> result = new HashMap<String, Object>();
         if (!file.isEmpty()) {
             try {
+
+
                 //程序根路径，也就是/resources
-                File basePath = new File(ResourceUtils.getURL("classpath:").getPath());
+                //File basePath = new File(ResourceUtils.getURL("classpath:").getPath());
                 //upload的路径
-                StringBuffer sbMedia = new StringBuffer("upload/");
+                //StringBuffer sbMedia = new StringBuffer("upload/");
                 //获取当前年月以创建目录，如果没有该目录则创建
-                sbMedia.append(HaloUtils.YEAR).append("/").append(HaloUtils.MONTH).append("/");
-                File mediaPath = new File(basePath.getAbsolutePath(), sbMedia.toString());
-                if (!mediaPath.exists()) {
-                    mediaPath.mkdirs();
-                }
+                //sbMedia.append(HaloUtils.YEAR).append("/").append(HaloUtils.MONTH).append("/");
+                //File mediaPath = new File(basePath.getAbsolutePath(), sbMedia.toString());
+                //if (!mediaPath.exists()) {
+                //    mediaPath.mkdirs();
+                //}
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
                 String nameWithOutSuffix = file.getOriginalFilename().substring(0, file.getOriginalFilename().lastIndexOf('.')).replaceAll(" ","_").replaceAll(",","")+dateFormat.format(new Date())+new Random().nextInt(1000);
                 String fileSuffix = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf('.') + 1);
                 String fileName = nameWithOutSuffix+"."+fileSuffix;
-                file.transferTo(new File(mediaPath.getAbsoluteFile(), fileName));
+                //file.transferTo(new File(mediaPath.getAbsoluteFile(), fileName));
 
+                InputStream inputStream = file.getInputStream();
+                String filePath = ImageUploadToQINIU.upload(inputStream);
                 //保存在数据库
                 Attachment attachment = new Attachment();
                 attachment.setAttachName(fileName);
-                attachment.setAttachPath(new StringBuffer("/upload/").append(HaloUtils.YEAR).append("/").append(HaloUtils.MONTH).append("/").append(fileName).toString());
+                attachment.setAttachPath(filePath);
+                attachment.setAttachSmallPath(filePath);
                 //判断图片大小，如果长宽都小于500，则保存原始图片路径
-                BufferedImage sourceImg = ImageIO.read(new FileInputStream(mediaPath.getPath() + "/" + fileName));
-                if (sourceImg.getWidth() < 500 || sourceImg.getHeight() < 500) {
+                //BufferedImage sourceImg = ImageIO.read(new FileInputStream(mediaPath.getPath() + "/" + fileName));
+                /*if (sourceImg.getWidth() < 500 || sourceImg.getHeight() < 500) {
                     attachment.setAttachSmallPath(new StringBuffer("/upload/").append(HaloUtils.YEAR).append("/").append(HaloUtils.MONTH).append("/").append(fileName).toString());
                 } else {
                     attachment.setAttachSmallPath(new StringBuffer("/upload/").append(HaloUtils.YEAR).append("/").append(HaloUtils.MONTH).append("/").append(nameWithOutSuffix).append("_small.").append(fileSuffix).toString());
                     //剪裁图片
                     HaloUtils.cutCenterImage(new StringBuffer(mediaPath.getAbsolutePath()).append("/").append(fileName).toString(), new StringBuffer(mediaPath.getAbsolutePath()).append("/").append(nameWithOutSuffix).append("_small.").append(fileSuffix).toString(), 500, 500, fileSuffix);
-                }
+                }*/
 
                 attachment.setAttachType(file.getContentType());
                 attachment.setAttachSuffix(new StringBuffer(".").append(fileSuffix).toString());
@@ -171,7 +182,7 @@ public class AttachmentController {
                 attachmentService.saveByAttachment(attachment);
 
                 updateConst();
-                log.info("上传文件[" + fileName + "]到[" + mediaPath.getAbsolutePath() + "]成功");
+                log.info("上传文件[" + fileName + "]到[" + filePath + "]成功");
                 logsService.saveByLogs(
                         new Logs(LogsRecord.UPLOAD_FILE, fileName, HaloUtils.getIpAddr(request), new Date())
                 );

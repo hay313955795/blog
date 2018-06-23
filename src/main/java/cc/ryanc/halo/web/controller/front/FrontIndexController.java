@@ -44,6 +44,7 @@ public class FrontIndexController extends BaseController {
     @GetMapping
     public String index(Model model) {
         //调用方法渲染首页
+        System.out.println("123");
         return this.index(model, 1);
     }
 

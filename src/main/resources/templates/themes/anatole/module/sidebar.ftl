@@ -9,7 +9,7 @@
                 <#if options.anatole_style_hitokoto?default("false")=="true">
                     <p id="yiyan">获取中...</p>
                 <#else >
-                    <p>${user.userDesc?default("A other Halo theme")}</p>
+                    <p>${user.userDesc?default("六月的雨露")}</p>
                 </#if>
             </div>
         </div>
@@ -18,13 +18,13 @@
     <div class="footer">
         <a target="_blank" href="#">
             <span>Designed by </span>
-            <a href="https://www.caicai.me">CaiCai</a>
+            <a href="http://www.tracenight.com">TraceNight</a>
             <div class="by_halo">
-                <a href="https://github.com/ruibaby/halo" target="_blank">Proudly published with Halo&#65281;</a>
+                <a href="https://github.com/hay313955795" target="_blank">Proudly published with 夜幕下的尖椒&#65281;</a>
             </div>
-            <div class="footer_text">
+            <#--<div class="footer_text">
                 ${options.blog_footer_info?if_exists}
-            </div>
+            </div>-->
         </a>
     </div>
 </div>

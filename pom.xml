@@ -138,6 +138,31 @@
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
+
+		<!--七牛-->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.2.0, 7.2.99]</version>
+		</dependency>
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>3.3.1</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.6.2</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>happy-dns-java</artifactId>
+			<version>0.1.4</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<!-- 生产环境打包配置 -->
@@ -155,6 +180,10 @@
 					</resource>
 				</resources>
 				<plugins>
+					<plugin>
+						<groupId>org.springframework.boot</groupId>
+						<artifactId>spring-boot-maven-plugin</artifactId>
+					</plugin>
 					<!-- 跳过单元测试，不然打包的时候会因为加载不了application.yaml报错 -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>
@@ -212,7 +241,14 @@
 						</configuration>
 					</plugin>
 				</plugins>
+
+
+
 			</build>
+
+
+
+
 		</profile>
 
 		<!-- 开发环境 -->

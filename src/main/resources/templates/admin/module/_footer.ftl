@@ -1,4 +1,4 @@
 <footer class="main-footer">
-    <div class="pull-right hidden-xs"><a target="_blank" href="https://github.com/ruibaby/halo">0.0.3</a></div>
-    Thanks for using <strong><a data-pjax="true" href="/admin/halo">Halo</a>.</strong>
+    <div class="pull-right hidden-xs"><a target="_blank" href="https://github.com/hay313955795">1.0</a></div>
+    @ <strong><a data-pjax="true" href="/admin/halo">Hay</a>.</strong>
 </footer>
