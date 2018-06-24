@@ -8,7 +8,7 @@
                 <p>${user_session.userDisplayName?if_exists}</p><a href="/admin/profile"><i class="fa fa-circle text-success"></i>编辑</a>
             </div>
         </div>
-        <form action="#" method="get" class="sidebar-form">
+       <#-- <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search...">
                 <span class="input-group-btn">
@@ -17,7 +17,7 @@
                   </button>
                 </span>
             </div>
-        </form>
+        </form>-->
         <ul class="sidebar-menu" data-widget="tree">
             <li class="header">HEADER</li>
             <li class="">
@@ -69,7 +69,7 @@
                     </span>
                 </a>
             </li>
-            <li class="treeview">
+            <#--<li class="treeview">
                 <a data-pjax="true" href="#">
                     <i class="fa fa-paint-brush"></i>
                     <span>外观</span>
@@ -82,7 +82,7 @@
                     <li><a data-pjax="true" href="/admin/menus"><i class="fa fa-circle-o"></i>菜单</a></li>
                     <li><a data-pjax="false" href="/admin/themes/editor"><i class="fa fa-circle-o"></i>自定义</a></li>
                 </ul>
-            </li>
+            </li>-->
             <li class="treeview">
                 <a data-pjax="true" href="#">
                     <i class="fa fa-user-o"></i>

@@ -1,4 +1,4 @@
-<div class="sidebar animated fadeInDown">
+<div class="sidebar animated fadeInDown" >
     <div class="logo-title">
         <div class="title">
             <img src="${options.blog_logo?default("/anatole/source/images/logo@2x.png")}" style="width:127px;<#if options.anatole_style_avatar_circle?default('false')=='true'>border-radius:50%</#if>" />
@@ -9,7 +9,7 @@
                 <#if options.anatole_style_hitokoto?default("false")=="true">
                     <p id="yiyan">获取中...</p>
                 <#else >
-                    <p>${user.userDesc?default("六月的雨露")}</p>
+                    <p>${user.userDesc?default("一个Java技术渣的自白")}</p>
                 </#if>
             </div>
         </div>

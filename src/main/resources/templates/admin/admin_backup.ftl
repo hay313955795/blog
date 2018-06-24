@@ -16,12 +16,11 @@
                 <li class="active">备份恢复</li>
             </ol>
         </section>
-        <!--
-        <section class="content container-fluid">
+        <#--<section class="content container-fluid">
             <a href="/admin/backup/backupDb">备份数据库</a>
             <a href="/admin/backup/backupPost">备份文章</a>
-        </section>
-        -->
+        </section>-->
+
     </div>
     <#include "module/_footer.ftl">
 </div>
