@@ -28,4 +28,8 @@ public interface LogsRecord {
     String UPLOAD_FILE = "上传附件";
 
     String REMOVE_FILE = "移除附件";
+
+    String PUSH_TIME_LINE = "发布时间轴";
+
+    String REMOVE_TIME_LINE = "删除时间轴";
 }

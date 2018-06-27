@@ -52,4 +52,11 @@ public interface AttachmentService {
      * @return Attachment
      */
     Attachment removeByAttachId(Long attachId);
+
+    /**
+     * 附件id转成附件实体
+     * @param attachmentList
+     * @return
+     */
+    List<Attachment> strListToAttachmentList(List<String> attachmentList);
 }

@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
   tomcat:
     min-spare-threads: 20
     max-threads: 100
@@ -20,7 +20,7 @@ spring:
     driver-class-name: com.mysql.jdbc.Driver
     url: jdbc:mysql://118.25.17.117:3306/halodb?characterEncoding=utf8&useSSL=false
     username: haloddb
-    password: jsd1607
+    password: Jsd1607
 
   h2:
     console:

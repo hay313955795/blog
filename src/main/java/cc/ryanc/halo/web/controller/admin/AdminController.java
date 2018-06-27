@@ -1,15 +1,9 @@
 package cc.ryanc.halo.web.controller.admin;
 
-import cc.ryanc.halo.model.domain.Comment;
-import cc.ryanc.halo.model.domain.Logs;
-import cc.ryanc.halo.model.domain.Post;
-import cc.ryanc.halo.model.domain.User;
+import cc.ryanc.halo.model.domain.*;
 import cc.ryanc.halo.model.dto.HaloConst;
 import cc.ryanc.halo.model.dto.LogsRecord;
-import cc.ryanc.halo.service.CommentService;
-import cc.ryanc.halo.service.LogsService;
-import cc.ryanc.halo.service.PostService;
-import cc.ryanc.halo.service.UserService;
+import cc.ryanc.halo.service.*;
 import cc.ryanc.halo.utils.HaloUtils;
 import cc.ryanc.halo.web.controller.core.BaseController;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -56,6 +51,11 @@ public class AdminController extends BaseController {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private TimeLineService timeLineService;
+
+    @Autowired
+    private AttachmentService attachmentService;
     /**
      * 请求后台页面
      *
@@ -65,6 +65,7 @@ public class AdminController extends BaseController {
      */
     @GetMapping(value = {"", "/index"})
     public String index(Model model, HttpSession session) {
+
         //查询文章条数
         Integer postCount = postService.findAllPosts(HaloConst.POST_TYPE_POST).size();
         model.addAttribute("postCount", postCount);

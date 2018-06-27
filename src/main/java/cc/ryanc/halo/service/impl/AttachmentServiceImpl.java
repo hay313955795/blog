@@ -1,6 +1,7 @@
 package cc.ryanc.halo.service.impl;
 
 import cc.ryanc.halo.model.domain.Attachment;
+import cc.ryanc.halo.model.domain.Category;
 import cc.ryanc.halo.repository.AttachmentRepository;
 import cc.ryanc.halo.service.AttachmentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,5 +78,20 @@ public class AttachmentServiceImpl implements AttachmentService {
         Optional<Attachment> attachment = this.findByAttachId(attachId);
         attachmentRepository.delete(attachment.get());
         return attachment.get();
+    }
+
+    @Override
+    public List<Attachment> strListToAttachmentList(List<String> attachmentList) {
+
+        if (null == attachmentList) {
+            return null;
+        }
+        List<Attachment> attachments = new ArrayList<>();
+        Optional<Attachment> attachment = null;
+        for (String str : attachmentList) {
+            attachment = findByAttachId(Long.parseLong(str));
+            attachments.add(attachment.get());
+        }
+        return attachments;
     }
 }
