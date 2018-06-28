@@ -6,6 +6,9 @@ usage() {
     exit 1
 }
 
+
+
+
 is_exist(){
   pid=`ps -ef|grep $APP_NAME|grep -v grep|awk '{print $2}' `
   if [ -z "${pid}" ]; then

@@ -10,7 +10,12 @@ import cc.ryanc.halo.utils.HaloUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +50,14 @@ public class TimeLineController {
     private HttpServletRequest request;
 
     @GetMapping
-    public String TimeLine(){
+    public String TimeLine(Model model,
+                           @RequestParam(value = "status",defaultValue = "0") Integer status,
+                           @RequestParam(value = "page",defaultValue = "0") Integer page,
+                           @RequestParam(value = "size",defaultValue = "10") Integer size){
+        Sort sort = new Sort(Sort.Direction.DESC,"pushDate");
+        Pageable pageable = PageRequest.of(page,size,sort);
+        Page<TimeLine> timeLines = timeLineService.findTimeLineByTimeLineStatus(status,pageable);
+        model.addAttribute("timeLines",timeLines);
         return "admin/admin_timeLine";
     }
 
@@ -58,7 +70,6 @@ public class TimeLineController {
     @PostMapping(value = "/new/push")
     @ResponseBody
     public void pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") List<String> attachmenIdtList, HttpSession session){
-        User user = (User)session.getAttribute(HaloConst.USER_SESSION_KEY);
         try {
             List<Attachment> attachments = attachmentService.strListToAttachmentList(attachmenIdtList);
             timeLine.setImages(attachments);
@@ -84,6 +95,8 @@ public class TimeLineController {
             log.error("未知错误：{0}",e.getMessage());
         }
     }
+
+
 
 
 }

@@ -5,6 +5,8 @@ import cc.ryanc.halo.model.domain.TimeLine;
 import cc.ryanc.halo.repository.TimeLineRepository;
 import cc.ryanc.halo.service.TimeLineService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +54,11 @@ public class TimeLineServiceImpl implements TimeLineService {
         Optional<TimeLine> timeLine = this.findByTimeLineId(timeLineId);
         timeLine.get().setTimeLineStatus(status);
         return timeLineRepository.save(timeLine.get());
+    }
+
+    @Override
+    public Page<TimeLine> findTimeLineByTimeLineStatus(Integer timeLineStatus, Pageable pageable) {
+        return timeLineRepository.findTimeLineByTimeLineStatus(timeLineStatus,pageable);
     }
 
 

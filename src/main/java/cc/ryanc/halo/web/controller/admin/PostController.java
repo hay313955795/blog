@@ -69,6 +69,7 @@ public class PostController extends BaseController{
         Sort sort = new Sort(Sort.Direction.DESC,"postDate");
         Pageable pageable = PageRequest.of(page,size,sort);
         Page<Post> posts = postService.findPostByStatus(status,HaloConst.POST_TYPE_POST,pageable);
+
         model.addAttribute("posts",posts);
         model.addAttribute("publishCount",postService.findPostByStatus(0,HaloConst.POST_TYPE_POST,pageable).getTotalElements());
         model.addAttribute("draftCount",postService.findPostByStatus(1,HaloConst.POST_TYPE_POST,pageable).getTotalElements());
