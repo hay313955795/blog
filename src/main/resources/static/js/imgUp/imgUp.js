@@ -22,6 +22,7 @@ $(function(){
 		}
 		else if(numUp < 5){
 			fileList = validateUp(fileList);
+            upLoadImages(fileList);
 			for(var i = 0;i<fileList.length;i++){
 
 			 var imgUrl = "blob:http://www.jq22.com/7ef33ca6-5e39-4943-b112-6f7e1b3b2c68";
@@ -111,12 +112,24 @@ $(function(){
 			return arrFiles;
 	}
 	function upLoadImages(files){
-		$.ajax({
-			url:"/admin/attachments/upload/images",
-			data:{"images":files},
-			method:"POST",
 
-		})
+        var form = new FormData();
+        form.append("images",files);
+
+		$.ajax({
+			url: "/admin/attachments/upload/images",
+			data: form,
+			method: "POST",
+			async:true,
+			processData:false,
+            contentType:false,
+			success: function(data){
+				console.log(data);
+			}
+
+		});
+
+
 	}
 
 });

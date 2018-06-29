@@ -111,41 +111,39 @@
         </style>
         <section class="content container-fluid">
             <script src="/static/js/imgUp/imgUp.js"></script>
+            <link rel="stylesheet" href="/static/plugins/fileinput/fileinput.min.css">
+
             <div class="row">
                 <div class="col-md-5">
                     <div class="box box-primary">
                         <div class="box-body pad">
                             <div>
                                 <textarea id="content" class="form-control" rows="3" style="overflow-x:visible;overflow-y:visible;" ></textarea>
+                                <input id="imagelist" type="hidden"/>
                             </div>
                             <div id="toolBar">
                                 <a id="emoji" href="javascript:void(0);" >
                                     表情
                                 </a>
+                                <a id="showForm" href="javascript:void(0);">
+                                    上传
+                                </a>
                             </div>
-                            <div class="img-box full">
-                                <section class=" img-section">
-                                    <p class="up-p">图片上传</p>
-                                    <div class="z_photo upimg-div clear" >
-
-                                        <section class="z_file fl">
-                                            <img src="/static/images/imgUp/a11.png" class="add-img">
-                                            <input type="file" name="file" id="file" class="file" value="" accept="image/jpg,image/jpeg,image/png,image/bmp" multiple />
-                                        </section>
+                            <div class="row" id="uploadForm" style="display: none;">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="file-loading">
+                                            <input id="uploadImg" class="file-loading" type="file" multiple name="file">
+                                        </div>
                                     </div>
-                                </section>
-                            </div>
-                            <aside class="mask works-mask">
-                                <div class="mask-content">
-                                    <p class="del-p">您确定要删除作品图片吗？</p>
-                                    <p class="check-p"><span class="del-com wsdel-ok">确定</span><span class="wsdel-no">取消</span></p>
                                 </div>
-                            </aside>
+                            </div>
                         </div>
                     </div>
-                    611
                     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+
                     <script type="text/javascript">
+
                         $(function(){
                             $("#emoji").emoji({content_el:"#content",
                                 list:[
@@ -184,6 +182,38 @@
                             str = str.replace(/\[other_([0-9]*)\]/g,"<img src='/static/images/face/emoji3/$1.png' />");
                             return str;
                         }
+
+
+
+                        function loadFileInput() {
+                            $.getScript("/static/plugins/fileinput/fileinput.min.js",function () {
+                                $.getScript("/static/plugins/fileinput/zh.min.js",function () {
+                                    $('#uploadImg').fileinput({
+                                        language: 'zh',
+                                        uploadUrl: '/admin/attachments/upload/images',
+                                        uploadAsync: true,
+                                        allowedFileExtensions: ['jpg','gif','png','jpeg','svg','psd'],
+                                        maxFileCount: 100,
+                                        enctype : 'multipart/form-data',
+                                        showClose: false
+                                    }).on("fileuploaded",function (event,data,previewId,index) {
+                                        var data = data.jqXHR.responseJSON;
+                                        if(data.success=="1") {
+                                            $("#uploadForm").hide(400);
+                                            $("#imagelist").val($("#imagelist").val()+','+data.attachmentId)
+                                        }
+                                        console.log(data);
+                                    });
+                                });
+                            });
+                        }
+
+                        $(document).ready(function () {
+                            loadFileInput();
+                        });
+                        $("#showForm").click(function(){
+                            $("#uploadForm").slideToggle(400);
+                        });
                     </script>
                 </div>
                 <div class="col-md-7">

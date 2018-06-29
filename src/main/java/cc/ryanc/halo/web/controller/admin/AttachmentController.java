@@ -132,17 +132,18 @@ public class AttachmentController {
 
     /**
      * 上传图片数组
-     * @param files
+     * @param file
      * @param request
      * @return
      */
     @PostMapping(value = "/upload/images", produces = {"application/json;charset=UTF-8"})
     @ResponseBody
-    public Map<String, Object> UploadImage(@RequestParam("images") List<MultipartFile> files,
+    public Map<String, Object> UploadImage(@RequestParam("file") MultipartFile file,
                                            HttpServletRequest request){
-        System.out.println(files.size());
-      
-        return null;
+        System.out.println(file);
+        Map<String,Object> map = new HashMap<>();
+        map.put("a","asd");
+        return uploadAttachment(file,request);
     }
 
     /**
