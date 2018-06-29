@@ -14,13 +14,16 @@
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/css/loader.css">
     <link rel="stylesheet" href="/static/plugins/toast/css/jquery.toast.min.css">
+    <link rel="stylesheet" href="/static/css/imgUp/common.css">
+    <link rel="stylesheet" href="/static/css/imgUp/index.css">
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
     <script src="/static/plugins/jquery/jquery.min.js"></script>
     <script src="/static/plugins/bootstrap/js/bootstrap.min.js"></script>
-    <script src="//twemoji.maxcdn.com/twemoji.min.js"></script>
+    <script src="/static/js/jquery.emoji.js"></script>
+
 </head>
 <body class="hold-transition sidebar-mini ${options.admin_theme?default('skin-blue')} ${options.admin_layout?default('')} ${options.sidebar_style?default('')}">
 <#if options.admin_loading?default("false") == "true">
