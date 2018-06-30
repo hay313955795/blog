@@ -37,7 +37,7 @@
                     <li><a data-pjax="false" href="/admin/posts/new"><i class="fa fa-circle-o"></i>写文章</a></li>
                     <li><a data-pjax="true" href="/admin/category"><i class="fa fa-circle-o"></i>分类目录</a></li>
                     <li><a data-pjax="true" href="/admin/tag"><i class="fa fa-circle-o"></i>标签</a></li>
-                    <li><a data-pjax="true" href="/admin/timeline"><i class="fa fa-circle-o"></i>时间长廊</a></li>
+                    <li><a data-pjax="true" href="/admin/timeline/page"><i class="fa fa-circle-o"></i>时间长廊</a></li>
                 </ul>
             </li>
             <li class="treeview">

@@ -192,7 +192,7 @@
                                     $('#uploadImg').fileinput({
                                         language: 'zh',
                                         uploadUrl: '/admin/attachments/upload/images',
-                                        uploadAsync: false,
+                                        uploadAsync: true,
                                         showUpload: false,
                                         allowedFileExtensions: ['jpg','gif','png','jpeg','svg','psd'],
                                         maxFileCount: 100,
@@ -204,12 +204,13 @@
                                             actionUpload:'',//去除上传预览缩略图中的上传图片；
                                             actionZoom:''
                                         }
-                                    }).on("fileuploaded",function (event,data,previewId,index) {
+                                    }).on("filebatchuploadsuccess",function (event,data,previewId,index) {
                                         var data = data.jqXHR.responseJSON;
                                         if(data.success=="1") {
                                             $("#uploadForm").hide(400);
                                             imageList.push(data.attachmentId);
                                             $("#imagelist").val($("#imagelist").val()+','+data.attachmentId)
+                                            console.log(data.attachmentId);
                                         }
                                     });
                                 });
@@ -226,22 +227,36 @@
 
 
                         $('#submit').click(function(){
-                            if ($("#uploadImg").val() != "") {
-                                $('#uploadImg').fileinput('upload'); //触发插件开始上传。
+
+                            var imglength = ($('#uploadForm img').length)/2;
+                            console.log(imglength);
+                            for(var index = 0;index<imglength;index++){
+                                var imgsrc = $('#uploadForm img').eq(index*2).attr('src');
+                                imageList.push(imgsrc)
+                                console.log(imageList[index]);
                             }
+                            load();
+
+
+                        });
+
+
+                        function load(){
+                            console.log($("#imagelist").val());
                             $.ajax({
                                 type: 'post',
                                 url: '/admin/timeline/new/push',
                                 data: {
                                     "timeLineContent":$('#content').val(),
-                                    "attachmentList":[1,1]
+                                    "attachmentList":JSON.stringify(imageList)
                                 },
+                                dataType : 'json',
                                 Async: false,
                                 success:function(data){
-                                        console.log(data);
+                                    console.log(data);
                                 }
                             })
-                        })
+                        }
                     </script>
                 </div>
                 <div class="col-md-7">

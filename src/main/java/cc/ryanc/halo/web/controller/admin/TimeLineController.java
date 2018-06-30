@@ -7,8 +7,11 @@ import cc.ryanc.halo.service.AttachmentService;
 import cc.ryanc.halo.service.LogsService;
 import cc.ryanc.halo.service.TimeLineService;
 import cc.ryanc.halo.utils.HaloUtils;
+import cc.ryanc.halo.utils.ImageUploadToQINIU;
+import com.alibaba.fastjson.JSONArray;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,13 +20,18 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
 import static cc.ryanc.halo.model.dto.LogsRecord.PUSH_TIME_LINE;
+import static cc.ryanc.halo.utils.Base64.base64ToMultipart;
+import static cc.ryanc.halo.utils.ImageUploadToQINIU.GenerateImage;
 
 /**
  * @author : RYAN0UP
@@ -49,7 +57,7 @@ public class TimeLineController {
     @Autowired
     private HttpServletRequest request;
 
-    @GetMapping
+    @GetMapping("/page")
     public String TimeLine(Model model,
                            @RequestParam(value = "status",defaultValue = "0") Integer status,
                            @RequestParam(value = "page",defaultValue = "0") Integer page,
@@ -69,8 +77,22 @@ public class TimeLineController {
      */
     @PostMapping(value = "/new/push")
     @ResponseBody
-    public void pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") List<String> attachmenIdtList, HttpSession session){
-        try {
+    public String pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") String attachmenIdtList , HttpSession session) throws IOException {
+
+
+        System.out.println(timeLine);
+        System.out.println(attachmenIdtList);
+        List<String> ts = (List<String>) JSONArray.parseArray(attachmenIdtList, String.class);
+        for(int index = 0;index<ts.size();index++){
+
+            GenerateImage(ts.get(index));
+            MultipartFile multipartFile = base64ToMultipart(ts.get(index));
+            InputStream inputStream = multipartFile.getInputStream();
+            String filePath = ImageUploadToQINIU.upload(inputStream);
+            System.out.println(filePath);
+        }
+
+        /*try {
             List<Attachment> attachments = attachmentService.strListToAttachmentList(attachmenIdtList);
             timeLine.setImages(attachments);
             timeLine.setPushDate(new Date());
@@ -78,7 +100,8 @@ public class TimeLineController {
             logsService.saveByLogs(new Logs(PUSH_TIME_LINE,timeLine.getTimeLineContent(),HaloUtils.getIpAddr(request),new Date()));
         }catch (Exception e){
             log.error("未知错误：", e.getMessage());
-        }
+        }*/
+        return "1";
     }
 
     /**
@@ -86,7 +109,7 @@ public class TimeLineController {
      * @param timeLineId
      * @return
      */
-    @GetMapping("/throw")
+    @PostMapping("/throw")
     public void moveToTrash(@RequestParam("timeLineId") Long timeLineId){
         try{
             timeLineService.updateTimeLine(timeLineId,1);

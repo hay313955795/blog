@@ -8,7 +8,12 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.util.Auth;
+import sun.misc.BASE64Decoder;
+
+import java.io.ByteArrayInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 public class ImageUploadToQINIU {
     public static String upload( InputStream inputStream){
@@ -48,5 +53,37 @@ public class ImageUploadToQINIU {
 
         }
         return "http://ovp48417e.bkt.clouddn.com/"+newFilename;
+    }
+
+
+
+    //base64字符串转化成图片
+    public static boolean GenerateImage(String imgStr)
+    {   //对字节数组字符串进行Base64解码并生成图片
+        if (imgStr == null) //图像数据为空
+        {
+            return false;
+        }
+        BASE64Decoder decoder = new BASE64Decoder();
+        try
+        {
+            //Base64解码
+            byte[] b = decoder.decodeBuffer(imgStr);
+            for(int i=0;i<b.length;++i)
+            {
+                if(b[i]<0)
+                {//调整异常数据
+                    b[i]+=256;
+                }
+            }
+
+            InputStream input = new ByteArrayInputStream(b);
+            System.out.println(upload(input));
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 }
