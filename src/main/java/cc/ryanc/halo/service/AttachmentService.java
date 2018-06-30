@@ -59,4 +59,7 @@ public interface AttachmentService {
      * @return
      */
     List<Attachment> strListToAttachmentList(List<String> attachmentList);
+
+
+     List<Attachment> Base64ToAttachmentList(String Base64Str);
 }

@@ -77,31 +77,18 @@ public class TimeLineController {
      */
     @PostMapping(value = "/new/push")
     @ResponseBody
-    public String pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") String attachmenIdtList , HttpSession session) throws IOException {
+    public void pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") String attachmenIdtList , HttpSession session) throws IOException {
 
 
-        System.out.println(timeLine);
-        System.out.println(attachmenIdtList);
-        List<String> ts = (List<String>) JSONArray.parseArray(attachmenIdtList, String.class);
-        for(int index = 0;index<ts.size();index++){
-
-            GenerateImage(ts.get(index));
-            MultipartFile multipartFile = base64ToMultipart(ts.get(index));
-            InputStream inputStream = multipartFile.getInputStream();
-            String filePath = ImageUploadToQINIU.upload(inputStream);
-            System.out.println(filePath);
-        }
-
-        /*try {
-            List<Attachment> attachments = attachmentService.strListToAttachmentList(attachmenIdtList);
-            timeLine.setImages(attachments);
+        try {
+            List<Attachment> attachmentList = attachmentService.Base64ToAttachmentList(attachmenIdtList);
+            timeLine.setImages(attachmentList);
             timeLine.setPushDate(new Date());
             timeLineService.save(timeLine);
             logsService.saveByLogs(new Logs(PUSH_TIME_LINE,timeLine.getTimeLineContent(),HaloUtils.getIpAddr(request),new Date()));
         }catch (Exception e){
             log.error("未知错误：", e.getMessage());
-        }*/
-        return "1";
+        }
     }
 
     /**

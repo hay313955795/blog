@@ -27,8 +27,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         }
         System.out.println(request.getMethod());
         //否则拦截并跳转到登录
-        //response.sendRedirect("/admin/login");
-        return true;
+        response.sendRedirect("/admin/login");
+        return false;
     }
 
     @Override

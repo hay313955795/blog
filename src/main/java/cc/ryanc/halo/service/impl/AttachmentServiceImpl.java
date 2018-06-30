@@ -4,14 +4,23 @@ import cc.ryanc.halo.model.domain.Attachment;
 import cc.ryanc.halo.model.domain.Category;
 import cc.ryanc.halo.repository.AttachmentRepository;
 import cc.ryanc.halo.service.AttachmentService;
+import cc.ryanc.halo.utils.ImageUploadToQINIU;
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static cc.ryanc.halo.utils.Base64.base64ToMultipart;
+import static cc.ryanc.halo.utils.HaloUtils.getStringDate;
 
 /**
  * @author : RYAN0UP
@@ -93,5 +102,31 @@ public class AttachmentServiceImpl implements AttachmentService {
             attachments.add(attachment.get());
         }
         return attachments;
+    }
+
+
+    @Override
+    public List<Attachment> Base64ToAttachmentList(String Base64Str)  {
+        List<String> ts = (List<String>) JSONArray.parseArray(Base64Str, String.class);
+        List<Attachment> attachmentList = new ArrayList<>();
+        for(int index = 0;index<ts.size();index++){
+            MultipartFile multipartFile = base64ToMultipart(ts.get(index));
+            InputStream inputStream = null;
+            try {
+                inputStream = multipartFile.getInputStream();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String filePath = ImageUploadToQINIU.upload(inputStream);
+
+            Attachment attachment = new Attachment();
+            attachment.setAttachSmallPath(filePath);
+            attachment.setAttachCreated(new Date());
+            attachment.setAttachName(getStringDate("yyyy-MM-dd HH:mm:ss")+(int)(Math.random()*(9999-1000+1))+1000);
+            attachment.setAttachType(".jpg");
+            attachment.setAttachSuffix("image/jpeg");
+            attachmentList.add(this.saveByAttachment(attachment));
+        }
+        return attachmentList;
     }
 }

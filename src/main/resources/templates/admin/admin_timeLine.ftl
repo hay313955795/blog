@@ -141,6 +141,7 @@
                             </div>
                         </div>
                     </div>
+                    <div id="result" ></div>
                     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 
                     <script type="text/javascript">
@@ -247,7 +248,7 @@
                                 type: 'post',
                                 url: '/admin/timeline/new/push',
                                 data: {
-                                    "timeLineContent":$('#content').val(),
+                                    "timeLineContent":replace_em($('#content').val()),
                                     "attachmentList":JSON.stringify(imageList)
                                 },
                                 dataType : 'json',
@@ -260,7 +261,43 @@
                     </script>
                 </div>
                 <div class="col-md-7">
-                    dd
+                    <div class="layui-container">
+                        <link rel="stylesheet" href="/static/layui/css/layui.css">
+                        <ul class="layui-timeline" id="showList">
+
+                            <#if timeLines.content?size gt 0>
+
+                                <#list timeLines.content as timeLine>
+
+                                    <li class="layui-timeline-item">
+                                        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                        <div class="layui-timeline-content layui-text">
+                                            <h3 class="layui-timeline-title">${timeLine.pushDate}</h3>
+                                            <div>
+                                                <#if timeLine.timeLineContent?length gt 0>
+                                                    <p>${timeLine.timeLineContent}</p>
+                                                </#if>
+                                                <#if timeLine.images?size gt 0>
+                                                    <#list timeLine.images as img>
+                                                            <img src="${img.attachSmallPath?if_exists}" style="width: 100px;height: 100px">
+                                                    </#list>
+                                                </#if>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </#list>
+                            </#if>
+                            <#function add num1 num2>
+                                <#return num1+num2>
+                            </#function>
+                            <li class="layui-timeline-item" id="loadMore">
+                                <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+                                <div class="layui-timeline-content layui-text">
+                                    <div class="layui-timeline-title" id="load">更多</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </section>
