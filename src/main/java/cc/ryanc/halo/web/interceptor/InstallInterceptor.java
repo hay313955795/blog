@@ -20,6 +20,7 @@ public class InstallInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
+
         if (StringUtils.equals("true", HaloConst.OPTIONS.get("is_install"))) {
             return true;
         }

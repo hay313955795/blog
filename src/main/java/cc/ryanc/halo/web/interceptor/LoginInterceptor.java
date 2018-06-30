@@ -23,9 +23,10 @@ public class LoginInterceptor implements HandlerInterceptor {
         if (null != obj) {
             return true;
         }
+        System.out.println(request.getMethod());
         //否则拦截并跳转到登录
-        response.sendRedirect("/admin/login");
-        return false;
+        //response.sendRedirect("/admin/login");
+        return true;
     }
 
     @Override

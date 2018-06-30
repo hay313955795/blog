@@ -128,6 +128,7 @@
                                 <a id="showForm" href="javascript:void(0);">
                                     上传
                                 </a>
+                                <button id="submit">提交</button>
                             </div>
                             <div class="row" id="uploadForm" style="display: none;">
                                 <div class="col-md-12">
@@ -143,7 +144,7 @@
                     <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
 
                     <script type="text/javascript">
-
+                        var imageList = [];
                         $(function(){
                             $("#emoji").emoji({content_el:"#content",
                                 list:[
@@ -191,18 +192,25 @@
                                     $('#uploadImg').fileinput({
                                         language: 'zh',
                                         uploadUrl: '/admin/attachments/upload/images',
-                                        uploadAsync: true,
+                                        uploadAsync: false,
+                                        showUpload: false,
                                         allowedFileExtensions: ['jpg','gif','png','jpeg','svg','psd'],
                                         maxFileCount: 100,
+                                        maxFilesNum: 9,
+                                        dropZoneEnabled:false,
                                         enctype : 'multipart/form-data',
-                                        showClose: false
+                                        showClose: false,
+                                        layoutTemplates:{
+                                            actionUpload:'',//去除上传预览缩略图中的上传图片；
+                                            actionZoom:''
+                                        }
                                     }).on("fileuploaded",function (event,data,previewId,index) {
                                         var data = data.jqXHR.responseJSON;
                                         if(data.success=="1") {
                                             $("#uploadForm").hide(400);
+                                            imageList.push(data.attachmentId);
                                             $("#imagelist").val($("#imagelist").val()+','+data.attachmentId)
                                         }
-                                        console.log(data);
                                     });
                                 });
                             });
@@ -214,6 +222,26 @@
                         $("#showForm").click(function(){
                             $("#uploadForm").slideToggle(400);
                         });
+
+
+
+                        $('#submit').click(function(){
+                            if ($("#uploadImg").val() != "") {
+                                $('#uploadImg').fileinput('upload'); //触发插件开始上传。
+                            }
+                            $.ajax({
+                                type: 'post',
+                                url: '/admin/timeline/new/push',
+                                data: {
+                                    "timeLineContent":$('#content').val(),
+                                    "attachmentList":[1,1]
+                                },
+                                Async: false,
+                                success:function(data){
+                                        console.log(data);
+                                }
+                            })
+                        })
                     </script>
                 </div>
                 <div class="col-md-7">
