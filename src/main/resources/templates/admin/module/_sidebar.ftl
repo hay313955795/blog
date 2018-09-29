@@ -5,7 +5,7 @@
                 <img src="<#if user_session.userAvatar?if_exists!="">${user_session.userAvatar?if_exists}<#else >/static/images/default.png</#if>" class="img-circle" alt="User Image">
             </div>
             <div class="pull-left info">
-                <p>${user_session.userDisplayName?if_exists}</p><a href="/admin/profile"><i class="fa fa-circle text-success"></i>编辑</a>
+                <p>${user_session.userDisplayName?if_exists} &nbsp;&nbsp;<a href="/admin/profile"><i class="fa fa-circle text-success"></i>编辑</a></p>
             </div>
         </div>
        <#-- <form action="#" method="get" class="sidebar-form">
@@ -19,7 +19,7 @@
             </div>
         </form>-->
         <ul class="sidebar-menu" data-widget="tree">
-            <li class="header">HEADER</li>
+            <#--<li class="header">HEADER</li>-->
             <li class="">
                 <a data-pjax="true" href="/admin">
                     <i class="fa fa-dashboard"></i>
