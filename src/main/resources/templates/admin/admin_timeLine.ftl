@@ -121,14 +121,14 @@
                                 <textarea id="content" class="form-control" rows="3" style="overflow-x:visible;overflow-y:visible;" ></textarea>
                                 <input id="imagelist" type="hidden"/>
                             </div>
-                            <div id="toolBar">
+                            <div id="toolBar" style="margin-top: 20px;margin-bottom: 10px;">
                                 <a id="emoji" href="javascript:void(0);" >
                                     表情
                                 </a>
-                                <a id="showForm" href="javascript:void(0);">
+                                <a id="showForm"  href="javascript:void(0);">
                                     上传
                                 </a>
-                                <button id="submit">提交</button>
+                                <button class="btn btn-primary btn-xs " style="position: absolute;right: 10px" id="submit">提交</button>
                             </div>
                             <div class="row" id="uploadForm" style="display: none;">
                                 <div class="col-md-12">
@@ -142,12 +142,13 @@
                         </div>
                     </div>
                     <div id="result" ></div>
-                    <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
-
+                   <#-- <script src="http://www.jq22.com/jquery/jquery-1.10.2.js"></script>
+-->
                     <script type="text/javascript">
                         var imageList = [];
                         $(function(){
-                            $("#emoji").emoji({content_el:"#content",
+                            $("#emoji").emoji({
+                                content_el:"#content",
                                 list:[
                                     {
                                         name:"QQ表情",
@@ -225,8 +226,6 @@
                             $("#uploadForm").slideToggle(400);
                         });
 
-
-
                         $('#submit').click(function(){
 
                             var imglength = ($('#uploadForm img').length)/2;
@@ -234,16 +233,13 @@
                             for(var index = 0;index<imglength;index++){
                                 var imgsrc = $('#uploadForm img').eq(index*2).attr('src');
                                 imageList.push(imgsrc)
-                                console.log(imageList[index]);
+                                //console.log(imageList[index]);
                             }
+                            console.log(111)
                             load();
-
-
                         });
-
-
                         function load(){
-                            console.log($("#imagelist").val());
+                            console.log(123);
                             $.ajax({
                                 type: 'post',
                                 url: '/admin/timeline/new/push',
@@ -254,7 +250,14 @@
                                 dataType : 'json',
                                 Async: false,
                                 success:function(data){
+                                    //刷新页面
+                                    location.reload();
+                                    console.log(111);
                                     console.log(data);
+                                },
+                                error:function(error){
+                                    console.log('error')
+                                    console.log(error)
                                 }
                             })
                         }

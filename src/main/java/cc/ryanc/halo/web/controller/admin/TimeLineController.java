@@ -9,6 +9,7 @@ import cc.ryanc.halo.service.TimeLineService;
 import cc.ryanc.halo.utils.HaloUtils;
 import cc.ryanc.halo.utils.ImageUploadToQINIU;
 import com.alibaba.fastjson.JSONArray;
+import com.qiniu.util.Json;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -77,7 +78,7 @@ public class TimeLineController {
      */
     @PostMapping(value = "/new/push")
     @ResponseBody
-    public void pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") String attachmenIdtList , HttpSession session) throws IOException {
+    public String pushPost(@ModelAttribute TimeLine timeLine, @RequestParam("attachmentList") String attachmenIdtList , HttpSession session) throws IOException {
 
 
         try {
@@ -86,8 +87,10 @@ public class TimeLineController {
             timeLine.setPushDate(new Date());
             timeLineService.save(timeLine);
             logsService.saveByLogs(new Logs(PUSH_TIME_LINE,timeLine.getTimeLineContent(),HaloUtils.getIpAddr(request),new Date()));
+            return Json.encode("Success") ;
         }catch (Exception e){
             log.error("未知错误：", e.getMessage());
+            return "Failed";
         }
     }
 
