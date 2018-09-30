@@ -32,6 +32,8 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import static cc.ryanc.halo.utils.ImageUploadToQINIU.delete;
+
 /**
  * @author : RYAN0UP
  * @date : 2017/12/19
@@ -226,41 +228,17 @@ public class AttachmentController {
     public boolean removeAttachment(@PathParam("attachId") Long attachId,
                                     HttpServletRequest request) {
         Optional<Attachment> attachment = attachmentService.findByAttachId(attachId);
-        String delFileName = attachment.get().getAttachName();
-        String delSmallFileName = delFileName.substring(0, delFileName.lastIndexOf('.')) + "_small" + attachment.get().getAttachSuffix();
+        String delFilePath = attachment.get().getAttachPath();
         try {
             //删除数据库中的内容
             attachmentService.removeByAttachId(attachId);
             //刷新HaloConst变量
             updateConst();
-            //删除文件
-            File basePath = new File(ResourceUtils.getURL("classpath:").getPath());
-            File mediaPath = new File(basePath.getAbsolutePath(), attachment.get().getAttachPath().substring(0, attachment.get().getAttachPath().lastIndexOf('/')));
-            File delFile = new File(new StringBuffer(mediaPath.getAbsolutePath()).append("/").append(delFileName).toString());
-            File delSmallFile = new File(new StringBuffer(mediaPath.getAbsolutePath()).append("/").append(delSmallFileName).toString());
+            //删除七牛上的文件
+            delete(delFilePath);
 
-            BufferedImage sourceImg = ImageIO.read(new FileInputStream(delFile));
-            if (sourceImg.getWidth() > 500 && sourceImg.getHeight() > 500) {
-                if (delSmallFile.exists()) {
-                    if (delSmallFile.delete()) {
-                        updateConst();
-                    }
-                }
-            }
-            if (delFile.exists() && delFile.isFile()) {
-                if (delFile.delete()) {
-                    updateConst();
-                    log.info("删除文件[" + delFileName + "]成功！");
-                    logsService.saveByLogs(
-                            new Logs(LogsRecord.REMOVE_FILE, delFileName, HaloUtils.getIpAddr(request), new Date())
-                    );
-                } else {
-                    log.error("删除附件[" + delFileName + "]失败！");
-                    return false;
-                }
-            }
         } catch (Exception e) {
-            log.error("删除附件[" + delFileName + "]失败！:", e.getMessage());
+
             return false;
         }
         return true;
