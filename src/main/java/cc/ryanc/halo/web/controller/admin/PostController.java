@@ -3,10 +3,7 @@ package cc.ryanc.halo.web.controller.admin;
 import cc.ryanc.halo.model.domain.*;
 import cc.ryanc.halo.model.dto.HaloConst;
 import cc.ryanc.halo.model.dto.LogsRecord;
-import cc.ryanc.halo.service.CategoryService;
-import cc.ryanc.halo.service.LogsService;
-import cc.ryanc.halo.service.PostService;
-import cc.ryanc.halo.service.TagService;
+import cc.ryanc.halo.service.*;
 import cc.ryanc.halo.utils.HaloUtils;
 import cc.ryanc.halo.web.controller.core.BaseController;
 import lombok.extern.slf4j.Slf4j;
@@ -49,6 +46,9 @@ public class PostController extends BaseController{
 
     @Autowired
     private LogsService logsService;
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private HttpServletRequest request;
@@ -114,6 +114,11 @@ public class PostController extends BaseController{
     public String viewPost(@PathParam("postId") Long postId,Model model){
         Optional<Post> post = postService.findByPostId(postId);
         model.addAttribute("post",post.get());
+        Sort sort = new Sort(Sort.Direction.DESC,"commentDate");
+        Pageable pageable = PageRequest.of(0,999,sort);
+        Page<Comment> comments = commentService.findCommentsByPostAndCommentStatus(post.get(),pageable,2);
+        model.addAttribute("post",post.get());
+        model.addAttribute("comments",comments);
         return this.render("post");
     }
 

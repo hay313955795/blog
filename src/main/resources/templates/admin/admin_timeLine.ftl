@@ -227,7 +227,6 @@
                         });
 
                         $('#submit').click(function(){
-
                             var imglength = ($('#uploadForm img').length)/2;
                             console.log(imglength);
                             for(var index = 0;index<imglength;index++){
@@ -276,6 +275,7 @@
                                         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
                                         <div class="layui-timeline-content layui-text">
                                             <h3 class="layui-timeline-title">${timeLine.pushDate}</h3>
+
                                             <div>
                                                 <#if timeLine.timeLineContent?length gt 0>
                                                     <p>${timeLine.timeLineContent}</p>
