@@ -1785,7 +1785,7 @@ a {
     visibility: visible;
     -webkit-transition-delay: 0;
     -moz-transition-delay: 0;
-    transition-delay: 0
+    transition-delay: 0;
 }
 .top-bar {
     height: 25px

@@ -51,6 +51,7 @@ public class StartupConfig implements ApplicationListener<ContextRefreshedEvent>
             }else{
                 //以防万一
                 BaseController.THEME = "anatole";
+               // BaseController.THEME = "material";
             }
         }catch (Exception e){
             log.error("加载主题设置失败：{0}",e.getMessage());

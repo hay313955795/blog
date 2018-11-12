@@ -11,9 +11,9 @@
         <#include "../_partial/sidebar-navigation.ftl">
 
         <!-- Sidebar Footer -->
-        <#include "../_partial/sidebar-footer.ftl">
+        <#--<#include "../_partial/sidebar-footer.ftl">-->
     </div>
 
     <!-- Sidebar Image -->
-    <#include "../_partial/sidebar-footer_image.ftl">
+    <#--<#include "../_partial/sidebar-footer_image.ftl">-->
 </aside>
